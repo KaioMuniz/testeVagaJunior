@@ -63,9 +63,14 @@ volumes:
 - Acesse `http://localhost:8080/swagger-ui.html` para visualizar a documentação da API.
 
 ## Como Executar
-1. Subir o banco com Docker Compose: `docker-compose up -d`
-2. Build do projeto: `./mvnw clean package`
-3. Rodar a aplicação: `java -jar target/app.jar`
+1. Clonar o repositório
+
+git clone https://github.com/KaioMuniz/testeVagaJunior.git
+cd testeVagaJunior
+
+2. Rodar com Docker Compose + Dockerfile
+
+docker-compose up -d --build
 
 ## Contato
 - Kaio Muniz - kkaioribeiro@gmail.com
