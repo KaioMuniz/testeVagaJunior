@@ -2,9 +2,15 @@ package br.com.kaiomuniz.controllers;
 
 import java.util.List;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import br.com.kaiomuniz.dtos.CreateOrderRequest;
 import br.com.kaiomuniz.dtos.OrderResponse;
@@ -22,7 +28,8 @@ public class OrderController {
 
     @PostMapping
     public ResponseEntity<OrderResponse> createOrder(@RequestBody CreateOrderRequest request) {
-        return new ResponseEntity<>(service.createOrder(request), HttpStatus.CREATED);
+        OrderResponse response = service.createOrder(request);
+        return ResponseEntity.status(201).body(response); // 201 Created
     }
 
     @GetMapping
@@ -30,18 +37,13 @@ public class OrderController {
             @RequestParam(required = false) Long clientId,
             @RequestParam int page,
             @RequestParam int size) {
-
-        if(clientId == null) return ResponseEntity.badRequest().build();
-        return ResponseEntity.ok(service.listOrders(clientId, page, size));
+        List<OrderResponse> orders = service.listOrders(clientId, page, size);
+        return ResponseEntity.ok(orders); // 200 OK
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<?> payOrder(@PathVariable Long id) {
-        try {
-            return ResponseEntity.ok(service.payOrder(id));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(e.getMessage());
-        }
+    public ResponseEntity<OrderResponse> payOrder(@PathVariable Long id) {
+        OrderResponse response = service.payOrder(id);
+        return ResponseEntity.ok(response); // 200 OK
     }
 }
